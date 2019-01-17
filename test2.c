@@ -20,6 +20,7 @@ void str_cli(FILE *fp, int sockfd)
 			Select(maxfd,&rset,NULL,NULL,NULL);
 			if(FD_ISSET(sockfd,&rset))
 			{				
+				memset(recvline,0,MAXLINE);
 				if(Read(sockfd,recvline,MAXLINE)==0)
 				{
 					if(stdineof==1)
@@ -27,9 +28,11 @@ void str_cli(FILE *fp, int sockfd)
 					err_quit("str_cli:server terminated prematurely");
 				}
 				Write(fileno(fp),recvline,MAXLINE);	
+
 			}
 			if(FD_ISSET(fileno(fp),&rset))
 			{
+				memset(sendline,0,MAXLINE);
 				if(Read(fileno(fp),sendline,MAXLINE)==0)
 				{
 					stdineof=1;
@@ -38,6 +41,7 @@ void str_cli(FILE *fp, int sockfd)
 					continue;
 				}
 				Writen(sockfd,sendline,strlen(sendline));
+
 			}
 		}
 }
