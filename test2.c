@@ -30,7 +30,7 @@ void str_cli(FILE *fp, int sockfd)
 			}
 			if(FD_ISSET(fileno(fp),&rset))
 			{
-				if(Read(fileno(fp),recvline,MAXLINE)==0)
+				if(Read(fileno(fp),sendline,MAXLINE)==0)
 				{
 					stdineof=1;
 					FD_CLR(fileno(fp),&rset);
