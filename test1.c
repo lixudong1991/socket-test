@@ -7,9 +7,7 @@ void str_cli(FILE *fp, int sockfd)
 {
 	char sendline[4096], recvline[4096];
 	while (fgets(sendline, 4096, fp) != NULL) {
-		Writen(sockfd, sendline,1);
-		sleep(1);
-		Writen(sockfd, sendline+1,strlen(sendline)-1);
+		Writen(sockfd, sendline,strlen(sendline));
 		if (readline(sockfd, recvline, 4096) == 0)
 			err_quit("str_cli:server terminated prematurely");
 		fputs(recvline, stdout);
