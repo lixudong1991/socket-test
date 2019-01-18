@@ -15,7 +15,10 @@ void str_echo(int fd)
 	char buf[MAXLINE];
 again:
 	while((n=read(fd,buf,MAXLINE))>0)
-	Writen(fd,buf,n);
+	{
+		printf("--> %s\n",buf);
+		Writen(fd,buf,n);
+	}
 	if(n<0&&errno==EINTR)
 		goto again;
 	else if(n<0)
