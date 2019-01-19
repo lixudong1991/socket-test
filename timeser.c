@@ -18,6 +18,7 @@ again:
 	{
 		printf("--> %s\n",buf);
 		Writen(fd,buf,n);
+		bzero(buf,MAXLINE);
 	}
 	if(n<0&&errno==EINTR)
 		goto again;
