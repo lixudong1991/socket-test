@@ -49,19 +49,27 @@ int main(int argc, char **argv)
 {
         int sockfd, n;
         char recvline[MAXLINE + 1];
-        struct sockaddr_in servaddr;
+        struct sockaddr_in servaddr,ss;
+		socklen_t iplen=sizeof(ss);
+		char clientip[20];
         if (argc != 3)
                 err_quit("usage: a.out <IPaddress> <port>");
         if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
                 err_sys("socket error");
         bzero(&servaddr, sizeof(servaddr));
+		bzero(&ss,sizeof(ss));
         servaddr.sin_family = AF_INET;
         servaddr.sin_port = htons(atoi(argv[2]));
         if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0)
                 err_quit("inet_pton error for &s", argv[1]);
+
         Signal(SIGPIPE,sig);
         if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) < 0)
                 err_sys("connect error");
+		if (getsockname(sockfd, (SA*)&ss, &iplen) ==0)
+        {
+			printf("%s  %d\n", Inet_ntop(AF_INET, &ss.sin_addr, clientip, sizeof(clientip)), ntohs(ss.sin_port));
+        }
         str_cli(stdin,sockfd);
         exit(0);
 }
